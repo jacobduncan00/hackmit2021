@@ -4,6 +4,7 @@ import Map from "./Map";
 import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 
+// Home component
 export default function Home() {
   const [content, setContent] = useState("");
   return (
@@ -15,7 +16,7 @@ export default function Home() {
       </Head>
       <div className={styles.fullwidth}>
         <Map setTooltipContent={setContent} />
-        <ReactTooltip>{content}</ReactTooltip>
+        <ReactTooltip textColor="white">{content}</ReactTooltip>
       </div>
     </div>
   );
