@@ -6,7 +6,8 @@ import {
   Geography,
 } from "react-simple-maps";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const geoUrl = "../public/customgeo.json"
+// const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const MapChart = ({ setTooltipContent }) => {
   return (
