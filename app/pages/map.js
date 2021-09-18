@@ -54,4 +54,5 @@ const MapChart = ({ setTooltipContent }) => {
   );
 };
 
+// Exporting using memoization
 export default memo(MapChart);
