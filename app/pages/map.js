@@ -1,10 +1,9 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   ZoomableGroup,
   ComposableMap,
   Geographies,
   Geography,
-  Graticule,
   Marker,
 } from "react-simple-maps";
 
@@ -12,7 +11,7 @@ const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
 const MapChart = ({ setTooltipContent }) => {
-  // const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState([]);
   const markers = [
     {
       markerOffset: 25,
@@ -20,11 +19,18 @@ const MapChart = ({ setTooltipContent }) => {
       coordinates: [-58.3816, -34.6037],
     },
   ];
+
+  useEffect(() => {
+    fetch("http://localhost:5000/get-hurricane-data").then((data) => {
+      console.log(data);
+      setMarkers(...markers, data.coordinate);
+    });
+  });
+
   return (
     <div style={{ backgroundColor: "#006994" }}>
-      <ComposableMap projection="geoMercator">
+      <ComposableMap data-tip="" projection="geoMercator">
         <ZoomableGroup>
-          {/* <Graticule stroke="#000000" /> */}
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => (
@@ -32,7 +38,7 @@ const MapChart = ({ setTooltipContent }) => {
                   key={geo.rsmKey}
                   geography={geo}
                   onMouseEnter={() => {
-                    const NAME = geo.properties.name;
+                    const { NAME } = geo.properties;
                     setTooltipContent(NAME);
                   }}
                   onMouseLeave={() => {

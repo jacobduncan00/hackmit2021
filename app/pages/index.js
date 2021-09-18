@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
       <div className={styles.fullwidth}>
         <Map setTooltipContent={setContent} />
-        <ReactTooltip>{content}</ReactTooltip>
+        <ReactTooltip textColor="white">{content}</ReactTooltip>
       </div>
     </div>
   );
