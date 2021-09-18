@@ -1,22 +1,30 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import {
   ZoomableGroup,
   ComposableMap,
   Geographies,
   Geography,
+  Graticule,
+  Marker,
 } from "react-simple-maps";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const geoUrl =
+  "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
 const MapChart = ({ setTooltipContent }) => {
+  // const [markers, setMarkers] = useState([]);
+  const markers = [
+    {
+      markerOffset: 25,
+      name: "Buenos Aires",
+      coordinates: [-58.3816, -34.6037],
+    },
+  ];
   return (
-    <>
-      <ComposableMap
-        data-tip=""
-        projection="geoAlbersUsa"
-        projectionConfig={{ scale: 500 }}
-      >
+    <div style={{ backgroundColor: "#006994" }}>
+      <ComposableMap projection="geoMercator">
         <ZoomableGroup>
+          {/* <Graticule stroke="#000000" /> */}
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => (
@@ -32,7 +40,7 @@ const MapChart = ({ setTooltipContent }) => {
                   }}
                   style={{
                     default: {
-                      fill: "#D6D6DA",
+                      fill: "#567d46",
                       outline: "none",
                     },
                     hover: {
@@ -48,11 +56,26 @@ const MapChart = ({ setTooltipContent }) => {
               ))
             }
           </Geographies>
+          {markers.map(({ name, coordinates, markerOffset }) => (
+            <Marker key={name} coordinates={coordinates}>
+              <circle r={5} fill="#F00" stroke="#fff" strokeWidth={2} />
+              <text
+                textAnchor="middle"
+                y={markerOffset}
+                style={{
+                  fontFamily: "system-ui",
+                  fill: "#F00",
+                  fontSize: "15px",
+                }}
+              >
+                {name}
+              </text>
+            </Marker>
+          ))}
         </ZoomableGroup>
       </ComposableMap>
-    </>
+    </div>
   );
 };
 
-// Exporting using memoization
 export default memo(MapChart);
