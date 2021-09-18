@@ -1,8 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Map from "./Map";
+import Map2 from "./newmap";
 import { useState } from "react";
-import ReactTooltip from "react-tooltip";
 
 // Home component
 export default function Home() {
@@ -15,8 +14,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.fullwidth}>
-        <Map setTooltipContent={setContent} />
-        <ReactTooltip textColor="white">{content}</ReactTooltip>
+        <Map2 />
       </div>
     </div>
   );
