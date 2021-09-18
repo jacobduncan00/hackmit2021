@@ -6,7 +6,7 @@ Use this to start the Flask app.
 -> python3 main.py
 """
 
-
+# Needed to create the Flask app:
 from api import create_app
 
 # Creates app from api package:
