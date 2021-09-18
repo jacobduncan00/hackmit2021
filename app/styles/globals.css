@@ -1,16 +1,14 @@
-html,
+html {
+  font-family: system-ui, sans-serif;
+  font-size: 1.25rem;
+}
+
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  padding: 0 1.5rem;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+svg {
+  display: inline-block;
+  vertical-align: middle;
 }
