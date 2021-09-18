@@ -1,4 +1,4 @@
-import { Map, TileLayer, Marker, Popup } from "react-leaflet"
+import { Map, TileLayer, Marker, Popup } from "react-leaflet-universal"
 import L from "leaflet"
 
 delete L.Icon.Default.prototype._getIconUrl;
