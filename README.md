@@ -4,7 +4,7 @@ Hack MIT 2021 Project Repository: Hurricane Damage Detection Web App
 ## How to run
 
 ```
-cd python && python3 main.py
+cd python &&  pip3 install -r requirements.txt && python3 main.py
 ```
 then in seperate terminal
 ```
