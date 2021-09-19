@@ -3,4 +3,5 @@ Flask_Cors==3.0.10
 geocoder==1.38.1
 Flask==1.1.2
 pandas==1.2.5
+scipy==1.7.1
 scikit_learn==0.24.2
