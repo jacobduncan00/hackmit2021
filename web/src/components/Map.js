@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Circle} from "google-maps-react";
+import key from "../key.json"
 
 const mapStyles = {
   width: "100%",
   height: "100%",
 };
+
+console.log(process.env.GOOGLE_KEY)
 
 export const MapContainer = (props) => {
   const [data, setData] = useState([]);
@@ -125,6 +128,6 @@ export const MapContainer = (props) => {
 };
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyDRzd12gtQwB1IWVKCzOn6L1cCC2YpciTY",
+  apiKey: key.google_key,
   libraries: ['visualization']
 })(MapContainer);
