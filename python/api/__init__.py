@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 # Helper imports:
 import geocoder
-from helpers import get_json
+from helpers import get_json_data, get_json_counties
 
 
 # Create the Flask app:
@@ -26,16 +26,31 @@ def create_app():
 
 
 # Route for collecting hurricane data:
-@app.route('/get-hurricane-data', methods=['GET'])
+@app.route('/get-hurricane-data/<name>', methods=['GET'])
 def get_hurricane_data(name: str='kate'):
     """Get json data for a hurricane.
 
     name(string): the name of the hurricane.
     format -> <name>-<year>
-    example:  KATE-2015
+    example:  kate-2015
+    ^ ignore for now
     """
-    json_data = get_json(name)
+    json_data = get_json_data(name)
     return json_data
+
+
+# Route for collecting hurricane data:
+@app.route('/get-hurricane-counties/<name>', methods=['GET'])
+def get_hurricane_counties(name: str='kate'):
+    """Get json counties for a hurricane.
+
+    name(string): the name of the hurricane.
+    format -> <name>-<year>
+    example:  kate-2015
+    ^ ignore for now
+    """
+    json_counties = get_json_counties(name)
+    return json_counties
 
 
 """
@@ -45,8 +60,8 @@ get-current-location() to return coords for current location.
 
 then need functions to calculate the distance from hurricanes
 by either state (or county?)
-
 """
+
 
 # Get the current location of the user:
 @app.route('/get-user-location', methods=['GET'])
@@ -61,7 +76,7 @@ def get_user_location():
     return coords
 
 
-# Test:
+# Test: STOP SIMPING 
 @app.route('/test', methods=['GET'])
 def test():
     pass
