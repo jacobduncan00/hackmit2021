@@ -1,7 +1,9 @@
-import Map from "./components/Map"
+import NavBar from "./components/NavBar";
 
 const App = () => (
-  <Map />
+  <div>
+    <NavBar />
+  </div>
 )
 
 export default App;

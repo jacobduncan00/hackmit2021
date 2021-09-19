@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Circle} from "google-maps-react";
 import key from "../key.json"
+import circle from "../assets/circle.svg"
 
 const mapStyles = {
   width: "100%",
   height: "100%",
 };
 
-console.log(process.env.GOOGLE_KEY)
-
 export const MapContainer = (props) => {
   const [data, setData] = useState([]);
   const [county, setCounty] = useState([]);
-  const [info, setInfo] = useState({})
+  const [info, setInfo] = useState({});
+  const [name, setName] = useState("");
+  const [radius, setRadius] = useState(0);
+  const [year, setYear] = useState(0);
 
-  const markerURL = "http://localhost:5000/get-hurricane-data/sandy";
-  const countyURL = "http://localhost:5000/get-hurricane-counties/sandy"
+  const namePlaceholder = "Enter name of storm"
+  const radiusPlaceholder = "Enter radius in KM"
+  const yearPlaceholder = "Enter year of storm"
 
-  useEffect(() => {
-    async function fetchHurricanePoints() {
-      const hurricanePoints = await fetch(markerURL).then((res) =>
-        res.json().then((data) => {
-          return data.data;
-        })
-      );
+  function fetchHurricanePoints(hurricanePoints) {
       hurricanePoints.forEach((point) => {
         let { Name, Latitude, Longitude } = point;
         const indvPoint = {
@@ -34,14 +31,9 @@ export const MapContainer = (props) => {
         };
         setData((oldData) => [...oldData, indvPoint]);
       });
-    }
+  }
 
-    async function fetchCountyPoints() {
-      const countyPoints = await fetch(countyURL).then((res) => 
-        res.json().then((data) => {
-          return data.data
-        })
-      );
+  function fetchCountyPoints(countyPoints) {
       countyPoints.forEach((countyIT) => {
         let { lat, lon, min_distance } = countyIT;
         const singleCounty = {
@@ -51,10 +43,7 @@ export const MapContainer = (props) => {
         }
         setCounty((oldCounty) => [...oldCounty, singleCounty])
       });
-    }
-    fetchHurricanePoints();
-    fetchCountyPoints();
-  }, []);
+  }
 
   const onMarkerClick = (props, marker) => {
     setInfo({
@@ -66,10 +55,57 @@ export const MapContainer = (props) => {
     });
   }
 
+  const nameChanged = (e) => {
+    setName(e.target.value)
+    console.log(name)
+  }
+  
+  const radiusChanged = (e) => {
+    setRadius(e.target.value)
+  }
+
+  const yearChanged = (e) => {
+    setYear(e.target.value)
+  }
+
+  const resetMarkerState = () => {
+    setData([])
+  }
+  
+  const resetCountyState = () => {
+    setCounty([])
+  }
+
+  const onButtonClick = async () => {
+    fetch(`http://localhost:5000/get-hurricane-data/${parseInt(radius)}/${name.toUpperCase()}/${parseInt(year)}`).then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+          resetMarkerState()
+          resetCountyState()
+          fetchHurricanePoints(data.data[0].data)
+          fetchCountyPoints(data.data[1].data)
+        })
+        .catch(error => console.log('Failure', error))
+  }
+
   return (
+    <div>
+      <div className="container h-fit mb-4 flex justify-left items-center px-4 sm:px-6 lg:px-8">
+            <div className="relative"> <input type="text" className="ml-56 h-14 w-96 pr-8 pl-5 rounded z-0 shadow focus:outline-none" onChange={nameChanged} placeholder={namePlaceholder}/>
+            </div>
+            <div className="relative"> <input type="text" className="ml-4 h-14 w-30 pr-8 pl-5 rounded z-0 shadow focus:outline-none" onChange={radiusChanged} placeholder={radiusPlaceholder}/>
+            </div>
+            <div className="relative"> <input type="text" className="ml-4 h-14 w-30 pr-8 pl-5 rounded z-0 shadow focus:outline-none" onChange={yearChanged} placeholder={yearPlaceholder}/>
+            </div>
+            <div className="relative">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white ml-4 font-bold py-2 px-4 rounded" onClick={onButtonClick}>
+                Search
+              </button>
+            </div>
+      </div>
     <Map
       google={props.google}
-      zoom={4}
+      zoom={5}
       style={mapStyles}
       initialCenter={{
         lat: 37.0902,
@@ -81,6 +117,8 @@ export const MapContainer = (props) => {
           onClick={onMarkerClick}
           name={marker.name}
           position={{ lat: marker.Latitude, lng: marker.Longitude }}
+          icon={{url: "https://www.svgrepo.com/show/137222/black-circle.svg",
+          scaledSize: new props.google.maps.Size(10, 10)}}
         />
       ))}
       {county.map((indvCounty) => {
@@ -117,13 +155,8 @@ export const MapContainer = (props) => {
               <h4>Coordinates: {info.selectedPlaceLatitude}, {info.selectedPlaceLongitude}</h4>
             </div>
         </InfoWindow>
-        {/* <HeatMap
-            gradient={gradient}
-            opacity={0.3}
-            positions={positions}
-            radius={20}
-        /> */}
     </Map>
+    </div>
   );
 };
 
